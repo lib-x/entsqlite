@@ -17,6 +17,7 @@ file mode
 ```go
 client, err := ent.Open("sqlite3", "file:./data.db?cache=shared&_pragma=foreign_keys(1)&_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=busy_timeout(10000)")
 ```
+memory mode
 ```go
 // Basic memory database
 client, err := ent.Open("sqlite3", "file::memory:?cache=shared")
