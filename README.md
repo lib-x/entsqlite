@@ -1,5 +1,5 @@
 # entsqlite
-Allow use `modernc.org/sqlite` in ent with concurrent support.
+Allow use `modernc.org/sqlite` in [ent orm](https://github.com/ent/ent)
 
 ## Installation
 ```bash
