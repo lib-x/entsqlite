@@ -6,5 +6,5 @@ import _ "github.com/lib-x/entsqlite"
 ```
 and then using ent as normal
 ```go
-client, err := ent.Open("sqlite3", "file:./data.db?_pragma=foreign_keys(1)&_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=busy_timeout(10000)")
+client, err := ent.Open("sqlite3", "file:./data.db?cache=shared&_pragma=foreign_keys(1)&_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=busy_timeout(10000)")
 ```
