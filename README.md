@@ -1,5 +1,3 @@
-我帮你完善这个文档：
-
 # entsqlite
 Allow use `modernc.org/sqlite` in ent with concurrent support.
 
