@@ -12,9 +12,18 @@ Just add one line in your import:
 import _ "github.com/lib-x/entsqlite"
 ```
 
-And then using ent as normal:
+And then using ent as normal
+file mode
 ```go
 client, err := ent.Open("sqlite3", "file:./data.db?cache=shared&_pragma=foreign_keys(1)&_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=busy_timeout(10000)")
+```
+```go
+// Basic memory database
+client, err := ent.Open("sqlite3", "file::memory:?cache=shared")
+// Temporary database that's deleted when connection closes
+client, err := ent.Open("sqlite3", "file:?mode=memory&cache=shared")
+// Named memory database that can be shared between connections
+client, err := ent.Open("sqlite3", "file:memdb1?mode=memory&cache=shared")
 ```
 
 ## Connection Parameters
@@ -50,6 +59,7 @@ Using `_pragma=name(value)` format to set SQLite PRAGMA:
    - Recommended: 5000-10000 (5-10 seconds)
 
 ### Additional Parameters
+file mode
 ```go
 // Full example with all recommended parameters
 dsn := "file:./data.db?" +
@@ -62,7 +72,19 @@ dsn := "file:./data.db?" +
     "_pragma=mmap_size(30000000000)&" +      // 30GB mmap size
     "_pragma=cache_size(-2000)"              // 2MB cache size
 ```
+memory mode
+```go
+// Optimized memory database configuration
+dsn := "file::memory:?" +
+    "cache=shared&" +
+    "mode=memory&" +
+    "_pragma=journal_mode(MEMORY)&" +
+    "_pragma=synchronous(OFF)&" +
+    "_pragma=foreign_keys(1)&" +
+    "_pragma=temp_store(MEMORY)&" +
+    "_pragma=cache_size(-2000)"
 
+```
 ### Performance Tuning Parameters
 1. `temp_store(MEMORY)`
    - Store temporary tables in memory
@@ -78,6 +100,19 @@ dsn := "file:./data.db?" +
    - Database cache size in KB (negative values)
    - -2000 means 2MB cache
    - Adjust based on available memory
+
+### Connection Parameters Comparison
+
+| Parameter | File Mode | Memory Mode | Description |
+|-----------|-----------|-------------|-------------|
+| cache | shared | shared | Enable shared cache |
+| mode | rwc | memory | Database mode |
+| _journal_mode | WAL | MEMORY | Journal mode |
+| _synchronous | NORMAL | OFF | Sync mode |
+| _temp_store | MEMORY | MEMORY | Temp storage |
+| _mmap_size | 30GB | N/A | Memory mapping |
+| _cache_size | -2000 | -2000 | Cache size in KB |
+
 
 ## Concurrency Support
 The WAL mode enables multiple readers and a single writer to operate concurrently. To optimize for concurrent operations:
@@ -120,3 +155,4 @@ defer client.Close()
 - [SQLite Documentation](https://www.sqlite.org/docs.html)
 - [SQLite PRAGMA Statements](https://www.sqlite.org/pragma.html)
 - [SQLite WAL Mode](https://www.sqlite.org/wal.html)
+
