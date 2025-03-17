@@ -2,7 +2,7 @@ module github.com/lib-x/entsqlite
 
 go 1.23.4
 
-require modernc.org/sqlite v1.36.0
+require modernc.org/sqlite v1.36.1
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
